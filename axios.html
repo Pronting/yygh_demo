@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>axios</title>
+    <script src="./vue.js"></script>
+    <script src="./axios.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <table>
+            <tr v-for="user in userList">
+                <td>{{user.name}}</td>
+                <td>{{user.age}}</td>
+            </tr>
+        </table>
+    </div>
+    <script>
+        new Vue({
+            el: "#app",
+            data: {
+                userList: []
+            },
+            created() {
+                // 在页面渲染之前执行,调用方法。得到json数据
+                this.getList()
+            },
+            methods: {
+                getList() {
+                    // 使用axios方式发送ajax请求
+                    axios.get("./data.json").then(response => {
+                            console.log(response)
+                            this.userList = response.data.data.item
+                            console.log(this.userList)
+                        })
+                        .catch(err => {
+                            console.log(err)
+                        })
+                }
+            }
+        })
+    </script>
+
+</body>
+
+</html>
