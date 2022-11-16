@@ -1,0 +1,11 @@
+src/
+node_modules/
+dist/
+webpackdemo/
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
