@@ -239,7 +239,7 @@ export default {
     },
 
     querySearchAsync(queryString, cb) {
-      this.searchObj = []
+      this.searchObj = [];
       if(queryString == '') return
       hospitalApi.getByHosname(queryString).then(response => {
         for (let i = 0, len = response.data.length; i < len; i++) {
