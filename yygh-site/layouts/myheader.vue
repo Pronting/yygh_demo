@@ -41,6 +41,19 @@
 </template>
 <script>
 export default {
+  data(){
+    return{
+      state:''
+    }
+  },
+  methods:{
+    querySearchAsync(){
+
+    },
+    handleSelect(){
+
+    }
+  }
 
 }
 </script>

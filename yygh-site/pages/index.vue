@@ -47,6 +47,7 @@
           </div>
         </div>
         <div class="v-scroll-list hospital-list">
+
           <div class="v-card clickable list-item" v-for="item in list" :key="item.id">
             <div class="">
               <div class="hospital-list-item hos-item" index="0" @click="show(item.hoscode)">
@@ -175,7 +176,8 @@ export default {
       districtList: [],
 
       hostypeActiveIndex: 0,
-      provinceActiveIndex: 0
+      provinceActiveIndex: 0,
+      state:''
     }
   },
 
@@ -238,6 +240,7 @@ export default {
       })
     },
 
+    //在输入框中输入值，弹出下拉框，显示相关内容
     querySearchAsync(queryString, cb) {
       this.searchObj = []
       if(queryString == '') return
@@ -249,18 +252,23 @@ export default {
       })
     },
 
+    //在下拉框中选择一个内容，执行下面的方法，跳转到详情页面
     handleSelect(item) {
       window.location.href = '/hospital/' + item.hoscode
     },
 
+    //根据医院等级查询
     hostypeSelect(hostype, index) {
+      //准备数据
       this.list = []
       this.page = 1
       this.hostypeActiveIndex = index
       this.searchObj.hostype = hostype
+      //调用查询医院列表方法
       this.getList();
     },
 
+    //根据地区查询列表
     districtSelect(districtCode, index) {
       this.list = []
       this.page = 1
@@ -269,6 +277,7 @@ export default {
       this.getList();
     },
 
+    //点击某个医院名称，跳转到详情页面中   动态路由
     show(hoscode) {
       window.location.href = '/hospital/' + hoscode
     }
