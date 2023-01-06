@@ -35,13 +35,18 @@
             <div class="filter-wrapper">
               <span class="label">等级：</span>
               <div class="condition-wrapper">
-                <span class="item v-link clickable" :class="hostypeActiveIndex == index ? 'selected' : ''" v-for="(item,index) in hostypeList" :key="item.id" @click="hostypeSelect(item.value, index)">{{ item.name }}</span>
+                  <span class="item v-link clickable" :class="hostypeActiveIndex == index ? 'selected' : ''"
+                        v-for="(item,index) in hostypeList" :key="item.id"
+                        @click="hostypeSelect(item.value, index)">{{ item.name }}</span>
               </div>
             </div>
             <div class="filter-wrapper">
               <span class="label">地区：</span>
               <div class="condition-wrapper">
-                <span class="item v-link clickable" :class="provinceActiveIndex == index ? 'selected' : ''" v-for="(item,index) in districtList" :key="item.id" @click="districtSelect(item.value, index)">{{ item.name }}</span>
+                  <span class="item v-link clickable" :class="provinceActiveIndex == index ? 'selected' : ''"
+                        v-for="(item,index) in districtList" :key="item.id" @click="districtSelect(item.value, index)">{{
+                      item.name
+                    }}</span>
               </div>
             </div>
           </div>
@@ -156,12 +161,12 @@ import dictApi from '../api/cmn/dict'
 
 export default {
   // asyncData：渲染组件之前异步获取数据
-  asyncData({ params, error }) {
+  asyncData({params, error}) {
     return hospitalApi.getPageList(1, 10, null).then(response => {
       console.log(response.data);
       return {
         list: response.data.content,
-        pages : response.data.totalPages
+        pages: response.data.totalPages
       }
     });
   },
@@ -177,7 +182,7 @@ export default {
 
       hostypeActiveIndex: 0,
       provinceActiveIndex: 0,
-      state:''
+      state: ''
     }
   },
 
@@ -186,13 +191,14 @@ export default {
   },
 
   mounted() {
-    document.getElementById("search").style.display = 'none';
+    // FIXME 没有id为search的DOM元素
+    // document.getElementById("search").style.display = 'none';
 
     // 添加滚动事件，检测滚动到页面底部
     window.addEventListener('scroll', this.load, true)
   },
 
-  destroyed(){
+  destroyed() {
     // 页面关闭的同时，记得将这个监听器关闭，节省性能
     window.removeEventListener('scroll', this.load, false)
   },
@@ -201,15 +207,15 @@ export default {
     init() {
       dictApi.findByDictCode("Hostype").then(response => {
         this.hostypeList = []
-        this.hostypeList.push({"name":"全部", "value":""})
-        for(let i in response.data){
+        this.hostypeList.push({"name": "全部", "value": ""})
+        for (let i in response.data) {
           this.hostypeList.push(response.data[i]);
         }
       })
       dictApi.findByDictCode('Beijin').then(response => {
         this.districtList = []
-        this.districtList.push({"name":"全部", "value":""})
-        for(let i in response.data){
+        this.districtList.push({"name": "全部", "value": ""})
+        for (let i in response.data) {
           this.districtList.push(response.data[i]);
         }
       })
@@ -217,14 +223,14 @@ export default {
 
     load(event) {
       // 滚动条高度为430 页面搜索消失，头部搜索显示
-      if(event.target.scrollTop > 430) {
+      if (event.target.scrollTop > 430) {
         document.getElementById("search").style.display = 'block';
       } else {
         document.getElementById("search").style.display = 'none';
       }
 
-      if(event.target.clientHeight + event.target.scrollTop >= event.target.scrollHeight){
-        if(this.page < this.pages){      //先判断下一页是否有数据
+      if (event.target.clientHeight + event.target.scrollTop >= event.target.scrollHeight) {
+        if (this.page < this.pages) {      //先判断下一页是否有数据
           this.page = this.page + 1
           this.getList();              //拉取接口数据
         }
@@ -233,7 +239,7 @@ export default {
 
     getList() {
       hospitalApi.getPageList(this.page, this.limit, this.searchObj).then(response => {
-        for(let i in response.data.content){
+        for (let i in response.data.content) {
           this.list.push(response.data.content[i]);
         }
         this.pages = response.data.totalPages
@@ -243,7 +249,7 @@ export default {
     //在输入框中输入值，弹出下拉框，显示相关内容
     querySearchAsync(queryString, cb) {
       this.searchObj = []
-      if(queryString == '') return
+      if (queryString == '') return
       hospitalApi.getByHosname(queryString).then(response => {
         for (let i = 0, len = response.data.length; i < len; i++) {
           response.data[i].value = response.data[i].hosname
