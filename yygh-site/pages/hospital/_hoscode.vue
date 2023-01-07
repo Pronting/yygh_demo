@@ -93,7 +93,6 @@
         </div>
       </div>
     </div>
-    <p>内容是 {{hospital}},{{bookingRule}}</p>
 
     <!-- 右侧内容 #end -->
   </div>
@@ -129,9 +128,6 @@ export default {
       hospitalApi.show(this.hoscode).then(response => {
         this.hospital = response.data.hospital
         this.bookingRule = response.data.bookingRule
-        console.log(this.hospital)
-        console.log(this.bookingRule)
-        console.log("init方法被调用了，初始化了hospital,bookingRule!")
       })
 
       //  根据医院编号查询科室信息
