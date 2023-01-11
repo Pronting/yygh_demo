@@ -103,6 +103,7 @@ import '~/assets/css/hospital_personal.css'
 import '~/assets/css/hospital.css'
 
 import hospitalApi from '../../api/hosp/hosptal'
+import cookie from 'js-cookie'
 
 export default {
   data() {
@@ -119,7 +120,7 @@ export default {
   },
   mounted() {
     //获取路径中的hoscode
-    this.hoscode =  this.$route.params.hoscode
+    this.hoscode = this.$route.params.hoscode
     this.init()
   },
   methods: {
@@ -142,7 +143,14 @@ export default {
     },
 
     schedule(depcode) {
-      window.location.href = '/hospital/schedule?hoscode=' + this.hoscode + "&depcode=" + depcode
+      // 登录判断
+      let token = cookie.get('token')
+      if (!token) {
+        loginEvent.$emit('loginDialogEvent')
+        return
+      }
+      window.location.href = '/hospital/schedule?hoscode=' + this.hospital.hoscode + "&depcode=" + depcode
+
     }
   }
 }
