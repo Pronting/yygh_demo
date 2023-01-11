@@ -1,6 +1,7 @@
 import axios from 'axios'
 //引入element -ui 消息发输出
-import { MessageBox, Message } from 'element-ui'
+import {MessageBox, Message} from 'element-ui'
+import cookie from 'js-cookie'
 // 创建axios实例
 const service = axios.create({
   baseURL: 'http://localhost',
@@ -10,6 +11,11 @@ const service = axios.create({
 service.interceptors.request.use(
   config => {
     // token 先不处理，后续使用时在完善
+    //判断cookie里界面是否有token值
+    if (cookie.get("token")) {
+      // FIXME  token的值放到cookie中
+      config.headers['token'] = cookie.get('token');
+    }
     return config
   },
   err => {
@@ -18,15 +24,20 @@ service.interceptors.request.use(
 // http response 拦截器
 service.interceptors.response.use(
   response => {
-    if (response.data.code !== 200) {
-      Message({
-        message: response.data.message,
-        type: 'error',
-        duration: 5 * 1000
-      })
-      return Promise.reject(response.data)
+    //状态码是208，弹出登录输入框
+    if (response.data.code === 208) {
+      loginEvent.$emit('loginDialogEvent')
     } else {
-      return response.data
+      if (response.data.code !== 200) {
+        Message({
+          message: response.data.message,
+          type: 'error',
+          duration: 5 * 1000
+        })
+        return Promise.reject(response.data)
+      } else {
+        return response.data
+      }
     }
   },
   error => {
