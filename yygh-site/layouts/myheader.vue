@@ -42,7 +42,7 @@
 
     <!-- 登录弹出层 -->
     <el-dialog :visible.sync="dialogUserFormVisible" style="text-align: left;" top="50px" :append-to-body="true"
-               width="960px" @close="closeDialog()">
+               width="960px" @close="closeDialog()" v-if="dialogUserFormVisible">
       <div class="container">
 
         <!-- 手机登录 #start -->
@@ -121,6 +121,8 @@ import userInfoApi from '@/api/userInfo'
 import smsApi from '@/api/msm'
 import hospitalApi from '@/api/hosp/hosptal.js'
 
+import weixinApi from '@/api/weixin'
+
 const defaultDialogAtrr = {
   showLoginType: 'phone', // 控制手机登录与微信登录切换
 
@@ -166,6 +168,21 @@ export default {
       document.getElementById("loginDialog").click();
     })
 // 触发事件，显示登录层：loginEvent.$emit('loginDialogEvent')
+
+    //初始化微信js
+    const script = document.createElement('script')
+    script.type = 'text/javascript'
+    script.src = 'https://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js'
+    document.body.appendChild(script)
+
+    // 微信登录回调处理
+    let self = this;
+    window["loginCallback"] = (name,token, openid) => {
+      self.loginCallback(name, token, openid);
+    }
+
+
+
   },
 
 
@@ -301,11 +318,39 @@ export default {
 
     weixinLogin() {
       this.dialogAtrr.showLoginType = 'weixin'
+
+      //舒适化微信相关的参数
+      weixinApi.getLoginParam().then(response => {
+        console.log(response.data);
+        var obj = new WxLogin({
+          self_redirect:true,
+          id: 'weixinLogin', // 需要显示的容器id
+          appid: response.data.appid, // 公众号appid wx*******
+          scope: response.data.scope, // 网页默认即可
+          redirect_uri: response.data.redirect_uri, // 授权成功后回调的url
+          state: response.data.state, // 可设置为简单的随机数加session用来校验
+          style: 'black', // 提供"black"、"white"可选。二维码的样式
+          href: '' // 外部css文件url，需要https
+        })
+      })
+
     },
 
     phoneLogin() {
 
-    }
+    },
+    //微信回调的方法
+    loginCallback(name, token, openid) {
+      // 打开手机登录层，绑定手机号，改逻辑与手机登录一致
+      //如果openid不为空，绑定手机号，如果openid为空，不需要绑定手机号
+      if(openid !== '') {
+        this.userInfo.openid = openid
+        this.showLogin()
+      } else {
+        this.setCookies(name, token)
+      }
+    },
+
   }
 }
 </script>

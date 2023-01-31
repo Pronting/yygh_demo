@@ -149,6 +149,7 @@ export default {
         loginEvent.$emit('loginDialogEvent')
         return
       }
+      // FIXME 跳转错误，疑似加入登录模块后台空指针
       window.location.href = '/hospital/schedule?hoscode=' + this.hospital.hoscode + "&depcode=" + depcode
 
     }
