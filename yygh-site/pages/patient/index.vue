@@ -79,6 +79,7 @@ export default {
         this.patientList = response.data
       })
     },
+    //
     //跳转到添加页面中去
     add() {
       window.location.href = '/patient/add'
