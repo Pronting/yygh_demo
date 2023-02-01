@@ -104,6 +104,7 @@ import '~/assets/css/hospital.css'
 
 import hospitalApi from '../../api/hosp/hosptal'
 import cookie from 'js-cookie'
+import userInfoApi from '@/api/userInfo'
 
 export default {
   data() {
@@ -149,9 +150,15 @@ export default {
         loginEvent.$emit('loginDialogEvent')
         return
       }
-      // FIXME 跳转错误，疑似加入登录模块后台空指针
-      window.location.href = '/hospital/schedule?hoscode=' + this.hospital.hoscode + "&depcode=" + depcode
+      //判断用户是否完成认证
+      userInfoApi.getUserInfo().then(response =>{
+        let authStatus = response.data.authStatus;
+        if (!authStatus || authStatus != 2) {
+          window.location.href = "/user";
+        }
+      })
 
+      window.location.href = '/hospital/schedule?hoscode=' + this.hospital.hoscode + "&depcode=" + depcode
     }
   }
 }
