@@ -209,7 +209,7 @@ export default {
       this.submitBnt = '正在提交'
       orderApi.saveOrders(this.scheduleId,this.patient.id).then(response =>{
         let orderId = response.data;  //订单id
-        window.location.href = '/order/show?orderId =' + orderId;
+        window.location.href= '/order/show?orderId =' + encodeURIComponent(orderId)
       }).catch(e =>{
         this.submitBnt = "确认挂号"
       })

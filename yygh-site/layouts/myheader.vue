@@ -91,13 +91,11 @@
         <div class="info-wrapper">
           <div class="code-wrapper">
             <div><img src="//img.114yygh.com/static/web/code_login_wechat.png" class="code-img">
-              <div class="code-text"><span class="iconfont icon"></span>微信扫一扫关注
-              </div>
+              <div class="code-text"><span class="iconfont icon"></span>微信扫一扫关注</div>
               <div class="code-text"> “快速预约挂号”</div>
             </div>
-            <div class="wechat-code-wrapper"><img
-              src="//img.114yygh.com/static/web/code_app.png"
-              class="code-img">
+            <div class="wechat-code-wrapper">
+              <img src="//img.114yygh.com/static/web/code_app.png" class="code-img">
               <div class="code-text"> 扫一扫下载</div>
               <div class="code-text"> “预约挂号”APP</div>
             </div>
@@ -109,6 +107,7 @@
         </div>
       </div>
     </el-dialog>
+    <div></div>
 
 
   </div>
@@ -156,9 +155,7 @@ export default {
   },
   created() {
     this.showInfo()
-    //FIXME 位置不正确
     this.dialogAtrr.showLoginType = 'phone'
-    this.showLogin();
   },
   mounted() {
 // 注册全局登录事件对象
